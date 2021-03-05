@@ -58,13 +58,9 @@ export default function PlaylistPage() {
   const [sortingProperty, setSortingProperty] = useState<keyof NumericAudioFeatures>("danceability");
 
 
-  console.log({ id });
-
   const path = useMemo(() => id ? `/api/playlists/${id}` : "", [id])
 
   const { status, data, error } = useErrorGuardedFetch<TracksByPlaylistWithFeaturesResponse>(path);
-
-  console.log({ status, data, error });
 
   if (status !== "fetched") {
     return null;

@@ -34,8 +34,6 @@ function CurentUserCard({ }) {
 
   const { status, data, error } = useFetch<MeResponse>("/api/me");
 
-  console.log({ status, data, error });
-
   if (status !== "fetched") {
     return null;
   }
@@ -66,10 +64,7 @@ function PlaylistCard({ name, description, images, tracks, owner, id, ...rest }:
 }
 
 export default function Home() {
-
   const { status, data, error } = useErrorGuardedFetch<PlaylistsResponse>("/api/playlists?limit=50");
-
-  console.log({ status, data, error });
 
   if (status !== "fetched") {
     return null;

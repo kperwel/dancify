@@ -48,7 +48,6 @@ export default async (
     return res.status(200).json({ items: featuredItems });
   } catch (error) {
     if (error.response) {
-      console.log(error.response.data.error);
       return res.status(error.response.status).json(error.response.data.error);
     }
     return res.status(500).json({ message: "internal server error" });

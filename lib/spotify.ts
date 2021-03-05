@@ -60,7 +60,6 @@ export const getTopTracks = async (access_token) => {
 const AUTHORIZE_ENDPOINT = `https://accounts.spotify.com/authorize`;
 
 export const login = (req, res) => {
-  console.log(scopes);
   res.redirect(
     `${AUTHORIZE_ENDPOINT}?response_type=code&client_id=${client_id}&scope=${encodeURIComponent(
       scopes
@@ -145,8 +144,6 @@ export const getTracksFeatures = async (
   const url = new URL(GET_AUDIO_FEATURES_URL);
   url.searchParams.set("ids", ids.join(","));
 
-  console.log(url.href);
-
   const response = await axios.get<AudioFeaturesResponse>(url.href, {
     headers: {
       Authorization: `Bearer ${access_token}`,
@@ -164,8 +161,6 @@ export const putPlay = async (
 ) => {
   const url = new URL(GET_AUDIO_FEATURES_URL);
   url.searchParams.set("ids", ids.join(","));
-
-  console.log(url.href);
 
   const response = await axios.get<AudioFeaturesResponse>(url.href, {
     headers: {
