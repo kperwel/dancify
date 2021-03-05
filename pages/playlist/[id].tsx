@@ -1,12 +1,13 @@
 import Head from "next/head";
 import { Link as ChakraLink, Container, Box, StackDivider, VStack, Heading, Text, Avatar, Flex, HStack, Stat, StatArrow, StatGroup, StatHelpText, StatLabel, StatNumber, Tag, Select, Skeleton } from "@chakra-ui/react";
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import useErrorGuardedFetch from "../../hooks/useErrorsGuardedFetch";
 import { FeaturedItem, TracksByPlaylistWithFeaturesResponse } from "../../api";
 import { Track } from "../../lib/TracksByPlaylistResponse";
 import { NumericAudioFeatures } from "../../lib/AudioFeaturesResponse";
+import axios from "axios";
 
 const sortByFeature = (property: keyof NumericAudioFeatures) => (a: FeaturedItem, b: FeaturedItem) => b.features[property] - a.features[property];
 
@@ -30,9 +31,18 @@ interface TrackCardProps extends FeaturedItem {
   currentSort: keyof NumericAudioFeatures
 }
 
-function TrackCard({ currentSort, track: { name, album: { images } }, features }: TrackCardProps) {
+function TrackCard({ currentSort, track: { id, name, album: { images } }, features }: TrackCardProps) {
+
+  const play = useCallback(async () => {
+    try {
+      await axios.put("/api/track/play", { id });
+    } catch (err) {
+      console.error("No device is currently playing");
+    }
+  }, [id])
+
   return (
-    <Box p={2} shadow="md" borderWidth="1px" position="relative">
+    <Box p={2} shadow="md" cursor="pointer" onClick={play} borderWidth="1px" position="relative">
       <HStack>
         <Avatar alignSelf="flex-end" src={images[2]?.url} />
         <Heading fontSize="xl">{name}</Heading>

@@ -155,18 +155,19 @@ export const getTracksFeatures = async (
 
 const PUT_PLAY_URL = "https://api.spotify.com/v1/me/player/play";
 
-export const putPlay = async (
-  access_token: string,
-  ids: Array<string>
-) => {
-  const url = new URL(GET_AUDIO_FEATURES_URL);
-  url.searchParams.set("ids", ids.join(","));
-
-  const response = await axios.get<AudioFeaturesResponse>(url.href, {
-    headers: {
-      Authorization: `Bearer ${access_token}`,
+export const putPlay = async (access_token: string, ids: Array<string>) => {
+  const url = new URL(PUT_PLAY_URL);
+  const response = await axios.put<null>(
+    url.href,
+    {
+      uris: ids.map((id) => `spotify:track:${id}`),
     },
-  });
+    {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    }
+  );
 
   return response.data;
 };
