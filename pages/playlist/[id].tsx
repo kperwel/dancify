@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { Link as ChakraLink, Container, Box, StackDivider, VStack, Heading, Text, Avatar, Flex, HStack, Stat, StatArrow, StatGroup, StatHelpText, StatLabel, StatNumber, Tag, Select } from "@chakra-ui/react";
+import { Link as ChakraLink, Container, Box, StackDivider, VStack, Heading, Text, Avatar, Flex, HStack, Stat, StatArrow, StatGroup, StatHelpText, StatLabel, StatNumber, Tag, Select, Skeleton } from "@chakra-ui/react";
 import React, { useMemo, useState } from "react";
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -51,6 +51,40 @@ function TrackCard({ currentSort, track: { name, album: { images } }, features }
   )
 }
 
+function MockedTrackCard() {
+  return (
+    <Box p={2} shadow="md" borderWidth="1px" position="relative">
+      <HStack>
+        <Avatar alignSelf="flex-end" />
+        <Heading fontSize="xl">
+          <Skeleton height="20px" width={Math.random() * 100 + 100} />
+        </Heading>
+      </HStack>
+      <StatGroup mt="5px">
+        {Array(3).fill(null).map((_, key) => (
+          <Stat key={key}>
+            <StatLabel textTransform="capitalize"><Skeleton width="50px" height="16px" /></StatLabel>
+            <StatNumber><Skeleton width="80px" mt="10px" height="24px" /></StatNumber>
+          </Stat>
+        ))}
+      </StatGroup>
+    </Box>
+  )
+}
+
+const Content = ({ children, onSortingChange, currentSort }: { currentSort: keyof NumericAudioFeatures, children: React.ReactNode, onSortingChange: (feature: keyof NumericAudioFeatures) => void }) => <Container p="10" maxW="xl">
+  <Select mb="10" value={currentSort} placeholder="Sort by" onChange={ev => onSortingChange(ev.currentTarget.value as keyof NumericAudioFeatures)}>
+    {numericFeatures.map(featureKey => (
+      <option key={featureKey} value={featureKey}>{featureKey}</option>
+    ))}
+  </Select>
+  <VStack
+    align="stretch"
+  >
+    {children}
+  </VStack>
+</Container>
+
 export default function PlaylistPage() {
   const router = useRouter()
   const { id } = router.query;
@@ -62,24 +96,15 @@ export default function PlaylistPage() {
 
   const { status, data, error } = useErrorGuardedFetch<TracksByPlaylistWithFeaturesResponse>(path);
 
-  if (status !== "fetched") {
-    return null;
-  }
+  const mock = useMemo(() => Array(10).fill(null).map((_, key) => <MockedTrackCard key={key} />), []);
 
-  return <Container p="10" maxW="xl">
-    <Select mb="10" placeholder="Sort by" onChange={ev => setSortingProperty(ev.currentTarget.value as keyof NumericAudioFeatures)}>
-      {numericFeatures.map(featureKey => (
-        <option key={featureKey} value={featureKey}>{featureKey}</option>
-      ))}
-    </Select>
-    <VStack
-      align="stretch"
-    >
-      {data.items.sort(sortByFeature(sortingProperty)).map(item => (
+  return <Content currentSort={sortingProperty} onSortingChange={setSortingProperty}>
+    {status !== "fetched" ? mock : (
+      data.items.sort(sortByFeature(sortingProperty)).map(item => (
         <TrackCard currentSort={sortingProperty} key={item.track.id} track={item.track} features={item.features} />
-      ))}
-    </VStack>
-  </Container>
+      ))
+    )}
+  </Content>
 }
 
 
