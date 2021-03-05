@@ -5,7 +5,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const cookies = new Cookies(req, res);
   const authToken = cookies.get("auth-token");
-  console.log(authToken);
   try {
     const response = await getTopTracks(authToken);
 
