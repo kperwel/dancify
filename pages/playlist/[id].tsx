@@ -7,7 +7,6 @@ import useErrorGuardedFetch from "../../hooks/useErrorsGuardedFetch";
 import { FeaturedItem, TracksByPlaylistWithFeaturesResponse } from "../../api";
 import { Track } from "../../lib/TracksByPlaylistResponse";
 import { NumericAudioFeatures } from "../../lib/AudioFeaturesResponse";
-import { randomSeed } from "../../lib/rng";
 
 const sortByFeature = (property: keyof NumericAudioFeatures) => (a: FeaturedItem, b: FeaturedItem) => b.features[property] - a.features[property];
 
