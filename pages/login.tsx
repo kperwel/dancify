@@ -15,16 +15,20 @@ const SpotifyIcon = (props) => (
 
 export default function LoginPage() {
     const router = useRouter();
-    
+
     return <Container p="10">
         <VStack spacing="10">
             <Text>
-                Hi, looks like we need bunch of data from Your Spotify to be able to display Dancify. Click button below to get details.
+                Hi, looks like we need bunch of data from Your Spotify to be able to display Dancify. Click button below to get details and login with Spotify.
             </Text>
 
             <Button leftIcon={<SpotifyIcon width="5" height="5" color="#1DB954" />} onClick={() => router.replace("/api/login")}>
                 Login with Spotify
             </Button>
+
+            <Text fontSize="xs">
+                (You will be forwarded to Spotify login page with detailed information about what data Dancify will use. No worries - Dancify is not storing any data on it's own and you can revoke access any time in your Spotify account settings)
+            </Text>
         </VStack>
     </Container>
 }
