@@ -68,7 +68,7 @@ function PlaylistCard({ name, description, images, tracks, owner, id, ...rest }:
             <Tag alignSelf="flex-end">{owner.display_name}</Tag>
           </VStack>
         </HStack>
-        <Box backgroundImage={`url(${images[0].url})`} position="absolute" top="0" left="0" right="0" bottom="0" zIndex="-1" pointerEvents="none" opacity="0.2" filter="blur(2px)" />
+        <Box backgroundImage={`url(${images[0]?.url})`} position="absolute" top="0" left="0" right="0" bottom="0" zIndex="-1" pointerEvents="none" opacity="0.2" filter="blur(2px)" />
       </Box>
     </Link>
   )
